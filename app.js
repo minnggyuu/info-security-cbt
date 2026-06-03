@@ -87,7 +87,7 @@ function openExam(examId) {
   state.answers = loadAnswers(examId);
 
   els.pageTitle.textContent = state.exam.title;
-  els.pageSubtitle.textContent = `${state.exam.questionCount}문항 · 클릭 즉시 정답 판정`;
+  els.pageSubtitle.textContent = `${state.exam.questionCount}문항`;
   els.homeView.classList.add("hidden");
   els.examView.classList.remove("hidden");
   els.backButton.classList.remove("hidden");
