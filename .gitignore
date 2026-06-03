@@ -1,0 +1,7 @@
+build-report.json
+context-image-report.json
+tmp-*.png
+scripts/
+*.pyc
+__pycache__/
+.DS_Store

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>정보보안기사 CBT</title>
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="icon-button hidden" id="backButton" type="button" aria-label="메인으로">←</button>
+      <div>
+        <h1 id="pageTitle">정보보안기사 CBT</h1>
+        <p id="pageSubtitle">기출 회차를 선택하세요.</p>
+      </div>
+      <button class="ghost-button hidden" id="resetButton" type="button">초기화</button>
+    </header>
+
+    <main>
+      <section id="homeView" class="home-grid" aria-label="회차 선택"></section>
+
+      <section id="examView" class="exam-layout hidden" aria-label="문제 풀이">
+        <aside class="side-panel">
+          <div class="score-box">
+            <span>진행</span>
+            <strong id="progressText">0 / 0</strong>
+          </div>
+          <div class="score-box">
+            <span>정답률</span>
+            <strong id="scoreText">0%</strong>
+          </div>
+          <div id="questionNav" class="question-nav" aria-label="문항 이동"></div>
+        </aside>
+
+        <article class="question-panel">
+          <div class="question-header">
+            <span id="questionNumber" class="question-number">1</span>
+            <div class="pager">
+              <button id="prevButton" type="button">이전</button>
+              <button id="nextButton" type="button">다음</button>
+            </div>
+          </div>
+          <p id="questionStem" class="question-stem"></p>
+          <div id="contextImageList" class="context-image-list"></div>
+          <div id="optionList" class="option-list"></div>
+          <div id="feedbackBox" class="feedback-box hidden" role="status"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
