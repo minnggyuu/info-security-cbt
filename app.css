@@ -125,7 +125,7 @@ h1 {
 
 .exam-layout {
   display: grid;
-  grid-template-columns: 278px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: 16px;
   align-items: start;
 }
@@ -138,6 +138,7 @@ h1 {
 }
 
 .side-panel {
+  order: 2;
   padding: 14px;
   position: sticky;
   top: 16px;
@@ -157,9 +158,38 @@ h1 {
 
 .question-nav {
   display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.part-nav {
+  display: grid;
+  gap: 8px;
+}
+
+.part-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.part-heading strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.part-heading span {
+  white-space: nowrap;
+}
+
+.part-question-grid {
+  display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 7px;
-  margin-top: 14px;
 }
 
 .question-nav button {
@@ -189,6 +219,7 @@ h1 {
 }
 
 .question-panel {
+  order: 1;
   padding: 24px;
   min-height: 540px;
 }
@@ -206,11 +237,13 @@ h1 {
   align-items: center;
   justify-content: center;
   min-width: 46px;
-  height: 38px;
+  min-height: 38px;
   border-radius: 6px;
   background: var(--accent);
   color: #fff;
   font-weight: 700;
+  padding: 7px 12px;
+  line-height: 1.35;
 }
 
 .pager {
@@ -340,8 +373,8 @@ h1 {
     position: static;
   }
 
-  .question-nav {
-    grid-template-columns: repeat(10, 1fr);
+  .part-question-grid {
+    grid-template-columns: repeat(5, 1fr);
   }
 
   .question-panel {

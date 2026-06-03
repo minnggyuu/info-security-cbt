@@ -97,7 +97,7 @@ function openExam(examId) {
 
 function renderQuestion() {
   const q = state.exam.questions[state.index];
-  els.questionNumber.textContent = `${q.number}번`;
+  els.questionNumber.textContent = `${q.number}번 · ${q.part}`;
   els.questionStem.textContent = q.stem;
   renderContextImages(q);
   els.optionList.innerHTML = "";
@@ -137,7 +137,7 @@ function renderContextImages(q) {
   q.contextImages.forEach((src) => {
     const image = document.createElement("img");
     image.src = src;
-    image.alt = `${q.number}번 문제 지문`;
+    image.alt = `${q.number}번 ${q.part} 문제 지문`;
     image.loading = "lazy";
     els.contextImageList.appendChild(image);
   });
@@ -166,20 +166,62 @@ function renderFeedback(q) {
 
 function renderNav() {
   els.questionNav.innerHTML = "";
-  state.exam.questions.forEach((q, idx) => {
-    const selected = state.answers[q.number];
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = q.number;
-    if (idx === state.index) button.classList.add("active");
-    if (selected) button.classList.add(selected === q.answer ? "correct" : "wrong");
-    button.addEventListener("click", () => {
-      state.index = idx;
-      renderQuestion();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    els.questionNav.appendChild(button);
+  const parts = state.exam.parts || buildPartsFromQuestions(state.exam.questions);
+  parts.forEach((part) => {
+    const section = document.createElement("section");
+    section.className = "part-nav";
+
+    const heading = document.createElement("div");
+    heading.className = "part-heading";
+    heading.innerHTML = `
+      <strong>${part.name}</strong>
+      <span>${part.range}번</span>
+    `;
+    section.appendChild(heading);
+
+    const grid = document.createElement("div");
+    grid.className = "part-question-grid";
+    state.exam.questions
+      .filter((q) => q.number >= part.start && q.number <= part.end)
+      .forEach((q) => {
+        const idx = state.exam.questions.findIndex((item) => item.number === q.number);
+        const selected = state.answers[q.number];
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = q.number;
+        button.setAttribute("aria-label", `${q.number}번 ${q.part}`);
+        if (idx === state.index) button.classList.add("active");
+        if (selected) button.classList.add(selected === q.answer ? "correct" : "wrong");
+        button.addEventListener("click", () => {
+          state.index = idx;
+          renderQuestion();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        grid.appendChild(button);
+      });
+    section.appendChild(grid);
+    els.questionNav.appendChild(section);
   });
+}
+
+function buildPartsFromQuestions(questions) {
+  const partMap = new Map();
+  questions.forEach((q) => {
+    if (!partMap.has(q.part)) {
+      partMap.set(q.part, {
+        name: q.part,
+        range: q.partRange,
+        start: q.number,
+        end: q.number,
+      });
+      return;
+    }
+    const part = partMap.get(q.part);
+    part.start = Math.min(part.start, q.number);
+    part.end = Math.max(part.end, q.number);
+    part.range = `${part.start}-${part.end}`;
+  });
+  return [...partMap.values()].sort((a, b) => a.start - b.start);
 }
 
 function renderStats() {
