@@ -36,7 +36,7 @@ button {
 
 .topbar {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr auto auto;
   gap: 14px;
   align-items: center;
   margin-bottom: 18px;
@@ -56,6 +56,7 @@ h1 {
 
 .icon-button,
 .ghost-button,
+.music-button,
 .pager button {
   border: 1px solid var(--line);
   background: var(--panel);
@@ -68,6 +69,22 @@ h1 {
   height: 42px;
   border-radius: 6px;
   font-size: 22px;
+}
+
+.music-button {
+  grid-column: -2 / -1;
+  justify-self: end;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.music-button.playing {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
 }
 
 .ghost-button,
@@ -101,8 +118,25 @@ h1 {
 .question-nav button:hover,
 .pager button:hover,
 .ghost-button:hover,
-.icon-button:hover {
+.icon-button:hover,
+.music-button:hover {
   border-color: var(--accent);
+}
+
+.music-player {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.music-player iframe {
+  width: 200px;
+  height: 200px;
 }
 
 .exam-card strong {
@@ -353,12 +387,17 @@ h1 {
   }
 
   .topbar {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
   }
 
   .ghost-button {
     grid-column: 1 / -1;
     justify-self: end;
+  }
+
+  .music-button {
+    grid-column: 3;
+    grid-row: 1;
   }
 
   h1 {

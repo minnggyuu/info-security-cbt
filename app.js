@@ -2,6 +2,10 @@ const state = {
   exam: null,
   index: 0,
   answers: {},
+  music: {
+    frame: null,
+    playing: false,
+  },
 };
 
 const els = {
@@ -11,6 +15,8 @@ const els = {
   examView: document.getElementById("examView"),
   backButton: document.getElementById("backButton"),
   resetButton: document.getElementById("resetButton"),
+  musicToggle: document.getElementById("musicToggle"),
+  musicPlayer: document.getElementById("musicPlayer"),
   progressText: document.getElementById("progressText"),
   scoreText: document.getElementById("scoreText"),
   questionNav: document.getElementById("questionNav"),
@@ -244,7 +250,44 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function updateMusicButton() {
+  if (!els.musicToggle) return;
+  els.musicToggle.classList.toggle("playing", state.music.playing);
+  els.musicToggle.textContent = state.music.playing ? "Ⅱ" : "♪";
+  els.musicToggle.setAttribute("aria-label", state.music.playing ? "배경음악 정지" : "배경음악 재생");
+  els.musicToggle.title = state.music.playing ? "배경음악 정지" : "배경음악 재생";
+}
+
+function playMusic() {
+  if (!els.musicPlayer || state.music.frame) return;
+  const frame = document.createElement("iframe");
+  frame.src = "https://www.youtube.com/embed/NqnmieDlnBc?autoplay=1&controls=0&loop=1&modestbranding=1&playsinline=1&playlist=NqnmieDlnBc&rel=0";
+  frame.title = "배경음악";
+  frame.allow = "autoplay; encrypted-media";
+  frame.referrerPolicy = "strict-origin-when-cross-origin";
+  els.musicPlayer.appendChild(frame);
+  state.music.frame = frame;
+  state.music.playing = true;
+  updateMusicButton();
+}
+
+function pauseMusic() {
+  state.music.frame?.remove();
+  state.music.frame = null;
+  state.music.playing = false;
+  updateMusicButton();
+}
+
+function toggleMusic() {
+  if (state.music.playing) {
+    pauseMusic();
+    return;
+  }
+  playMusic();
+}
+
 els.backButton.addEventListener("click", renderHome);
+els.musicToggle.addEventListener("click", toggleMusic);
 els.prevButton.addEventListener("click", () => {
   if (state.index > 0) {
     state.index -= 1;
@@ -264,4 +307,5 @@ els.resetButton.addEventListener("click", () => {
   renderQuestion();
 });
 
+updateMusicButton();
 renderHome();
